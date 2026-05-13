@@ -45,13 +45,100 @@
     }
     body.flash-1min { animation: flash-1min 0.4s ease-in-out 7; }
     body.flash-end  { animation: flash-end  0.8s ease-in-out infinite; }
+
+    /* ── Setup Screen ── */
+    #preset-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .preset {
+      background: #1a1a2e;
+      border: 2px solid #2a2a45;
+      border-radius: 12px;
+      color: #ccc;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      font-weight: 600;
+      padding: 18px 8px;
+      transition: border-color 0.1s, background 0.1s, color 0.1s;
+    }
+
+    .preset:hover   { border-color: #4ade80; color: #fff; }
+    .preset.selected { border-color: #4ade80; background: #1e3a2f; color: #4ade80; }
+
+    #stepper {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    #stepper button {
+      background: #1a1a2e;
+      border: 2px solid #2a2a45;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 2rem;
+      font-weight: bold;
+      width: 64px;
+      height: 64px;
+      line-height: 1;
+    }
+
+    #stepper button:hover { border-color: #4ade80; }
+
+    #stepper-display {
+      font-family: monospace;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      min-width: 140px;
+      text-align: center;
+      letter-spacing: 2px;
+    }
+
+    #btn-start {
+      background: #4ade80;
+      border: none;
+      border-radius: 14px;
+      color: #000;
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-weight: 800;
+      padding: 20px 0;
+      width: 100%;
+      max-width: 520px;
+      letter-spacing: 0.05em;
+    }
+
+    #btn-start:hover { background: #86efac; }
   </style>
 </head>
 <body>
 
   <!-- ══ SETUP SCREEN ══ -->
   <div id="screen-setup" class="screen">
-    <p>Setup screen — coming in next task</p>
+    <h1 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;letter-spacing:0.05em;">Set Timer</h1>
+
+    <div id="preset-grid">
+      <button class="preset" data-seconds="300">5 min</button>
+      <button class="preset" data-seconds="600">10 min</button>
+      <button class="preset" data-seconds="900">15 min</button>
+      <button class="preset" data-seconds="1200">20 min</button>
+      <button class="preset" data-seconds="1800">30 min</button>
+      <button class="preset" data-seconds="2700">45 min</button>
+      <button class="preset" data-seconds="3600">1 hr</button>
+      <button class="preset" data-seconds="5400">90 min</button>
+      <button class="preset" data-seconds="7200">2 hr</button>
+    </div>
+
+    <div id="stepper">
+      <button id="btn-minus">−</button>
+      <span id="stepper-display">10:00</span>
+      <button id="btn-plus">+</button>
+    </div>
+
+    <button id="btn-start">▶ Start</button>
   </div>
 
   <!-- ══ TIMER SCREEN ══ -->
