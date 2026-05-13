@@ -43,8 +43,9 @@
       0%, 100% { background-color: #3d0000; }
       50%       { background-color: #0f0f1a; }
     }
-    body.flash-1min { animation: flash-1min 0.4s ease-in-out 7; }
-    body.flash-end  { animation: flash-end  0.8s ease-in-out infinite; }
+    body.flash-1min  { animation: flash-1min  0.4s  ease-in-out 7; }
+    body.flash-15sec { animation: flash-1min  0.15s ease-in-out 10; }
+    body.flash-end   { animation: flash-end   0.8s  ease-in-out infinite; }
 
     /* ── Setup Screen ── */
     #preset-grid {
@@ -270,14 +271,16 @@
 
     // ── State ──
     const state = {
-      totalSeconds:    600,
-      remainingSeconds: 600,
-      running:          false,
-      view:             'ring',   // 'ring' | 'block'
-      tickInterval:     null,
-      milestoneTriggered: false,  // 1-min flash already fired?
-      oscillator:       null,
-      audioCtx:         null,
+      totalSeconds:       600,
+      remainingSeconds:   600,
+      running:            false,
+      view:               'ring',   // 'ring' | 'block'
+      tickInterval:       null,
+      milestoneTriggered:   false,  // 1-min flash already fired?
+      milestone15Triggered: false,  // 15-sec flash already fired?
+      oscillator:         null,
+      audioCtx:           null,
+      heartbeatCtx:       null,
     };
 
     // ── DOM refs ──
@@ -364,6 +367,7 @@
       state.remainingSeconds = state.totalSeconds;
       state.running = true;
       state.milestoneTriggered = false;
+      state.milestone15Triggered = false;
       screenSetup.classList.add('hidden');
       screenTimer.classList.remove('hidden');
       updateTimerDisplay();
@@ -410,6 +414,7 @@
           handleTimerEnd();
         } else {
           checkMilestones();
+          playHeartbeat();
           updateTimerDisplay();
         }
       }, 1000);
@@ -422,7 +427,15 @@
         !state.milestoneTriggered
       ) {
         state.milestoneTriggered = true;
-        trigger1MinFlash(); // defined in Task 9
+        trigger1MinFlash();
+      }
+      if (
+        state.totalSeconds >= 30 &&
+        state.remainingSeconds <= 15 &&
+        !state.milestone15Triggered
+      ) {
+        state.milestone15Triggered = true;
+        trigger15SecFlash();
       }
     }
 
@@ -450,6 +463,7 @@
       state.remainingSeconds = state.totalSeconds;
       state.running = true;
       state.milestoneTriggered = false;
+      state.milestone15Triggered = false;
       btnPause.textContent = '⏸ Pause';
       updateTimerDisplay();
       startTick();
@@ -480,6 +494,33 @@
     });
 
     // stubs for tasks 9 and 10
+    function playHeartbeat() {
+      try {
+        if (!state.heartbeatCtx) {
+          state.heartbeatCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        const ctx  = state.heartbeatCtx;
+        const osc  = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.value = 80;
+        const now = ctx.currentTime;
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+        osc.start(now);
+        osc.stop(now + 0.12);
+      } catch (_) {}
+    }
+
+    function trigger15SecFlash() {
+      document.body.classList.remove('flash-1min', 'flash-15sec', 'flash-end');
+      void document.body.offsetWidth;
+      document.body.classList.add('flash-15sec');
+      setTimeout(() => document.body.classList.remove('flash-15sec'), 1500);
+    }
+
     function trigger1MinFlash() {
       document.body.classList.remove('flash-1min', 'flash-end');
       void document.body.offsetWidth; // force reflow so animation restarts fresh
