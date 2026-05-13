@@ -320,8 +320,60 @@
     // ── Init ──
     ringProgress.setAttribute('stroke-dasharray', CIRCUMFERENCE);
 
-    // placeholder init call — will be replaced in Task 6
-    console.log('JS loaded. CIRCUMFERENCE =', CIRCUMFERENCE.toFixed(2));
+    // ── Setup Screen ──
+    function initSetup() {
+      const saved = parseInt(localStorage.getItem('timerDuration')) || 600;
+      state.totalSeconds = saved;
+      state.remainingSeconds = saved;
+      stepperDisplay.textContent = formatTime(saved);
+      presetBtns.forEach(btn => {
+        btn.classList.toggle('selected', parseInt(btn.dataset.seconds) === saved);
+      });
+    }
+
+    function setDuration(seconds) {
+      state.totalSeconds = seconds;
+      stepperDisplay.textContent = formatTime(seconds);
+    }
+
+    presetBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const s = parseInt(btn.dataset.seconds);
+        setDuration(s);
+        presetBtns.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
+
+    btnMinus.addEventListener('click', () => {
+      const newVal = Math.max(30, state.totalSeconds - 30);
+      setDuration(newVal);
+      presetBtns.forEach(b => b.classList.remove('selected'));
+    });
+
+    btnPlus.addEventListener('click', () => {
+      const newVal = Math.min(10800, state.totalSeconds + 30);
+      setDuration(newVal);
+      presetBtns.forEach(b => b.classList.remove('selected'));
+    });
+
+    btnStart.addEventListener('click', () => {
+      localStorage.setItem('timerDuration', state.totalSeconds);
+      state.remainingSeconds = state.totalSeconds;
+      state.running = true;
+      state.milestoneTriggered = false;
+      screenSetup.classList.add('hidden');
+      screenTimer.classList.remove('hidden');
+      updateTimerDisplay();   // defined in Task 8 — stub exists below for now
+      startTick();            // defined in Task 7
+    });
+
+    // ── Stub placeholders (replaced in later tasks) ──
+    function updateTimerDisplay() { /* Task 8 */ }
+    function startTick()          { /* Task 7 */ }
+
+    // ── Boot ──
+    initSetup();
   </script>
 </body>
 </html>
