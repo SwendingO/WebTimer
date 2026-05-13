@@ -4,8 +4,63 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Timer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #0f0f1a;
+      color: #fff;
+      font-family: system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    .screen {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      gap: 20px;
+    }
+
+    .hidden { display: none !important; }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    /* ── Flash animations ── */
+    @keyframes flash-1min {
+      0%, 100% { background-color: #0f0f1a; }
+      50%       { background-color: #3d0000; }
+    }
+    @keyframes flash-end {
+      0%, 100% { background-color: #3d0000; }
+      50%       { background-color: #0f0f1a; }
+    }
+    body.flash-1min { animation: flash-1min 0.4s ease-in-out 7; }
+    body.flash-end  { animation: flash-end  0.8s ease-in-out infinite; }
+  </style>
 </head>
 <body>
-  <p>Coming soon</p>
+
+  <!-- ══ SETUP SCREEN ══ -->
+  <div id="screen-setup" class="screen">
+    <p>Setup screen — coming in next task</p>
+  </div>
+
+  <!-- ══ TIMER SCREEN ══ -->
+  <div id="screen-timer" class="screen hidden">
+    <p>Timer screen — coming in next task</p>
+  </div>
+
+  <script>
+    // JS — coming in Task 5
+  </script>
 </body>
 </html>
