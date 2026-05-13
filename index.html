@@ -135,17 +135,18 @@
     }
 
     #blocks-container {
-      display: flex;
-      gap: clamp(4px, 1vw, 14px);
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: clamp(4px, 0.8vw, 10px);
+      row-gap: clamp(6px, 1.2vh, 14px);
       width: 100%;
       max-width: 960px;
       padding: 0 20px;
     }
 
     .block {
-      flex: 1;
-      height: clamp(28px, 4.5vh, 56px);
-      border-radius: 6px;
+      height: clamp(16px, 2.5vh, 32px);
+      border-radius: 4px;
       background: #4ade80;
       transition: background 0.3s;
     }
@@ -241,6 +242,26 @@
     <!-- Block view (hidden by default) -->
     <div id="view-blocks" class="timer-view hidden">
       <div id="blocks-container">
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
         <div class="block"></div>
         <div class="block"></div>
         <div class="block"></div>
@@ -389,7 +410,7 @@
 
       // Block view
       const filledCount = state.remainingSeconds > 0
-        ? Math.ceil((state.remainingSeconds / state.totalSeconds) * 10)
+        ? Math.ceil((state.remainingSeconds / state.totalSeconds) * 30)
         : 0;
       blockDivs.forEach((block, i) => {
         if (i < filledCount) {
