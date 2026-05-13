@@ -464,7 +464,13 @@
     });
 
     // stubs for tasks 9 and 10
-    function trigger1MinFlash() { /* Task 9 */ }
+    function trigger1MinFlash() {
+      document.body.classList.remove('flash-1min', 'flash-end');
+      void document.body.offsetWidth; // force reflow so animation restarts fresh
+      document.body.classList.add('flash-1min');
+      // Remove the class after the animation completes (7 iterations × 0.4s = 2.8s)
+      setTimeout(() => document.body.classList.remove('flash-1min'), 2800);
+    }
     function playSiren()        { /* Task 10 */ }
     function stopSiren()        { /* Task 10 */ }
 
