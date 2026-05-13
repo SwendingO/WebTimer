@@ -263,7 +263,65 @@
   </div>
 
   <script>
-    // JS — coming in Task 5
+    // ── Constants ──
+    const CIRCUMFERENCE = 2 * Math.PI * 130; // ring r=130
+
+    // ── State ──
+    const state = {
+      totalSeconds:    600,
+      remainingSeconds: 600,
+      running:          false,
+      view:             'ring',   // 'ring' | 'block'
+      tickInterval:     null,
+      milestoneTriggered: false,  // 1-min flash already fired?
+      oscillator:       null,
+      audioCtx:         null,
+    };
+
+    // ── DOM refs ──
+    const $ = id => document.getElementById(id);
+    const screenSetup    = $('screen-setup');
+    const screenTimer    = $('screen-timer');
+    const presetBtns     = document.querySelectorAll('.preset');
+    const stepperDisplay = $('stepper-display');
+    const btnMinus       = $('btn-minus');
+    const btnPlus        = $('btn-plus');
+    const btnStart       = $('btn-start');
+    const btnPause       = $('btn-pause');
+    const btnRestart     = $('btn-restart');
+    const btnToggleView  = $('btn-toggle-view');
+    const btnBack        = $('btn-back');
+    const viewRing       = $('view-ring');
+    const viewBlocks     = $('view-blocks');
+    const ringProgress   = $('ring-progress');
+    const ringTime       = $('ring-time');
+    const blocksContainer = $('blocks-container');
+    const blocksTime     = $('blocks-time');
+    const blockDivs      = blocksContainer.querySelectorAll('.block');
+
+    // ── Utilities ──
+    function formatTime(seconds) {
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = seconds % 60;
+      const mm = String(m).padStart(2, '0');
+      const ss = String(s).padStart(2, '0');
+      return h > 0 ? `${h}:${mm}:${ss}` : `${m}:${ss}`;
+    }
+
+    function getColor(remaining, total) {
+      const pct = remaining / total;
+      if (pct > 0.75) return '#4ade80'; // green
+      if (pct > 0.50) return '#facc15'; // yellow
+      if (pct > 0.25) return '#f97316'; // orange
+      return '#ef4444';                  // red
+    }
+
+    // ── Init ──
+    ringProgress.setAttribute('stroke-dasharray', CIRCUMFERENCE);
+
+    // placeholder init call — will be replaced in Task 6
+    console.log('JS loaded. CIRCUMFERENCE =', CIRCUMFERENCE.toFixed(2));
   </script>
 </body>
 </html>
