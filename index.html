@@ -528,7 +528,8 @@
         osc.type = 'sine';
         osc.frequency.value = 80;
         const now = ctx.currentTime;
-        gain.gain.setValueAtTime(0.35, now);
+        const vol = state.remainingSeconds <= 15 ? 0.9 : 0.35;
+        gain.gain.setValueAtTime(vol, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
         osc.start(now);
         osc.stop(now + 0.12);
