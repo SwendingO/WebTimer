@@ -149,6 +149,8 @@
       transition: background 0.3s;
     }
 
+    .block.empty { background: #1a1a2e !important; }
+
     #blocks-time {
       font-family: monospace;
       font-size: clamp(60px, 14vw, 200px);
@@ -364,7 +366,7 @@
       state.milestoneTriggered = false;
       screenSetup.classList.add('hidden');
       screenTimer.classList.remove('hidden');
-      updateTimerDisplay();   // defined in Task 8 — stub exists below for now
+      updateTimerDisplay();
       startTick();            // defined in Task 7
     });
 
@@ -431,7 +433,7 @@
       document.body.classList.add('flash-end');
       playSiren();          // defined in Task 10
       updateTimerDisplay();
-      btnPause.textContent = '▶ Resume';
+      btnPause.textContent = '⏹ Done';
     }
 
     btnPause.addEventListener('click', () => {
@@ -497,7 +499,7 @@
         gain.gain.value = 0.25;
         // Sweep between 380 Hz and 760 Hz in 1.5-second cycles
         const now = ctx.currentTime;
-        for (let i = 0; i < 120; i++) {
+        for (let i = 0; i < 400; i++) {
           osc.frequency.setValueAtTime(380, now + i * 1.5);
           osc.frequency.linearRampToValueAtTime(760, now + i * 1.5 + 0.75);
           osc.frequency.linearRampToValueAtTime(380, now + i * 1.5 + 1.5);
