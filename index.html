@@ -370,7 +370,76 @@
 
     // ── Stub placeholders (replaced in later tasks) ──
     function updateTimerDisplay() { /* Task 8 */ }
-    function startTick()          { /* Task 7 */ }
+    function startTick() {
+      clearInterval(state.tickInterval);
+      state.tickInterval = setInterval(() => {
+        if (!state.running) return;
+        state.remainingSeconds--;
+        if (state.remainingSeconds <= 0) {
+          state.remainingSeconds = 0;
+          clearInterval(state.tickInterval);
+          handleTimerEnd();
+        } else {
+          checkMilestones();
+          updateTimerDisplay();
+        }
+      }, 1000);
+    }
+
+    function checkMilestones() {
+      if (
+        state.totalSeconds >= 120 &&
+        state.remainingSeconds <= 60 &&
+        !state.milestoneTriggered
+      ) {
+        state.milestoneTriggered = true;
+        trigger1MinFlash(); // defined in Task 9
+      }
+    }
+
+    function handleTimerEnd() {
+      state.running = false;
+      document.body.classList.remove('flash-1min');
+      void document.body.offsetWidth; // force reflow to restart animation
+      document.body.classList.add('flash-end');
+      playSiren();          // defined in Task 10
+      updateTimerDisplay();
+      btnPause.textContent = '▶ Resume';
+    }
+
+    btnPause.addEventListener('click', () => {
+      if (state.remainingSeconds <= 0) return;
+      state.running = !state.running;
+      btnPause.textContent = state.running ? '⏸ Pause' : '▶ Resume';
+      if (state.running) startTick();
+    });
+
+    btnRestart.addEventListener('click', () => {
+      clearInterval(state.tickInterval);
+      stopSiren();
+      document.body.classList.remove('flash-1min', 'flash-end');
+      state.remainingSeconds = state.totalSeconds;
+      state.running = true;
+      state.milestoneTriggered = false;
+      btnPause.textContent = '⏸ Pause';
+      updateTimerDisplay();
+      startTick();
+    });
+
+    btnBack.addEventListener('click', () => {
+      clearInterval(state.tickInterval);
+      stopSiren();
+      document.body.classList.remove('flash-1min', 'flash-end');
+      state.running = false;
+      screenTimer.classList.add('hidden');
+      screenSetup.classList.remove('hidden');
+      initSetup();
+    });
+
+    // stubs for tasks 9 and 10
+    function trigger1MinFlash() { /* Task 9 */ }
+    function playSiren()        { /* Task 10 */ }
+    function stopSiren()        { /* Task 10 */ }
 
     // ── Boot ──
     initSetup();
