@@ -463,6 +463,20 @@
       initSetup();
     });
 
+    btnToggleView.addEventListener('click', () => {
+      if (state.view === 'ring') {
+        state.view = 'block';
+        viewRing.classList.add('hidden');
+        viewBlocks.classList.remove('hidden');
+        btnToggleView.textContent = '○ Ring';
+      } else {
+        state.view = 'ring';
+        viewBlocks.classList.add('hidden');
+        viewRing.classList.remove('hidden');
+        btnToggleView.textContent = '⊞ Blocks';
+      }
+    });
+
     // stubs for tasks 9 and 10
     function trigger1MinFlash() {
       document.body.classList.remove('flash-1min', 'flash-end');
