@@ -112,6 +112,80 @@
     }
 
     #btn-start:hover { background: #86efac; }
+
+    /* ── Timer Screen ── */
+    #screen-timer {
+      gap: 0;
+    }
+
+    .timer-view {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 16px;
+    }
+
+    #ring-svg {
+      width:  min(calc(100vh - 90px), calc(100vw - 32px));
+      height: min(calc(100vh - 90px), calc(100vw - 32px));
+    }
+
+    #blocks-container {
+      display: flex;
+      gap: clamp(4px, 1vw, 14px);
+      width: 100%;
+      max-width: 960px;
+      padding: 0 20px;
+    }
+
+    .block {
+      flex: 1;
+      height: clamp(28px, 4.5vh, 56px);
+      border-radius: 6px;
+      background: #4ade80;
+      transition: background 0.3s;
+    }
+
+    #blocks-time {
+      font-family: monospace;
+      font-size: clamp(60px, 14vw, 200px);
+      font-weight: 900;
+      line-height: 1;
+      margin-top: 28px;
+      color: #4ade80;
+    }
+
+    /* ── Bottom Bar ── */
+    #bottom-bar {
+      display: flex;
+      gap: 10px;
+      padding: 10px 14px 14px;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      flex-shrink: 0;
+    }
+
+    #bottom-bar button {
+      flex: 1;
+      background: #1a1a2e;
+      border: 2px solid #2a2a45;
+      border-radius: 10px;
+      color: #ccc;
+      font-size: clamp(0.85rem, 2vw, 1.1rem);
+      font-weight: 600;
+      padding: 14px 6px;
+    }
+
+    #bottom-bar button:hover { border-color: #4ade80; color: #fff; }
+
+    #btn-pause {
+      flex: 2;
+      border-color: #4ade80;
+      color: #4ade80;
+    }
   </style>
 </head>
 <body>
@@ -142,8 +216,50 @@
   </div>
 
   <!-- ══ TIMER SCREEN ══ -->
-  <div id="screen-timer" class="screen hidden">
-    <p>Timer screen — coming in next task</p>
+  <div id="screen-timer" class="screen hidden" style="padding:0;justify-content:flex-start;">
+
+    <!-- Ring view (default) -->
+    <div id="view-ring" class="timer-view">
+      <svg id="ring-svg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <circle id="ring-track"    cx="150" cy="150" r="130"
+          fill="none" stroke="#1a1a2e" stroke-width="20"/>
+        <circle id="ring-progress" cx="150" cy="150" r="130"
+          fill="none" stroke="#4ade80" stroke-width="20"
+          stroke-dasharray="816.81" stroke-dashoffset="0"
+          stroke-linecap="round" transform="rotate(-90 150 150)"/>
+        <text id="ring-time"
+          x="150" y="165" text-anchor="middle"
+          fill="#fff" font-family="monospace" font-size="54" font-weight="900">
+          10:00
+        </text>
+      </svg>
+    </div>
+
+    <!-- Block view (hidden by default) -->
+    <div id="view-blocks" class="timer-view hidden">
+      <div id="blocks-container">
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+      </div>
+      <div id="blocks-time">10:00</div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div id="bottom-bar">
+      <button id="btn-pause">⏸ Pause</button>
+      <button id="btn-restart">↺ Restart</button>
+      <button id="btn-toggle-view">⊞ Blocks</button>
+      <button id="btn-back">✕ Back</button>
+    </div>
+
   </div>
 
   <script>
