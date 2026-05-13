@@ -369,7 +369,34 @@
     });
 
     // ── Stub placeholders (replaced in later tasks) ──
-    function updateTimerDisplay() { /* Task 8 */ }
+    function updateTimerDisplay() {
+      const color = getColor(state.remainingSeconds, state.totalSeconds);
+      const timeStr = formatTime(state.remainingSeconds);
+
+      // Ring view
+      const pct = state.remainingSeconds / state.totalSeconds;
+      const offset = CIRCUMFERENCE * (1 - pct);
+      ringProgress.setAttribute('stroke-dashoffset', offset);
+      ringProgress.setAttribute('stroke', color);
+      ringTime.textContent = timeStr;
+      ringTime.setAttribute('fill', color);
+
+      // Block view
+      const filledCount = state.remainingSeconds > 0
+        ? Math.ceil((state.remainingSeconds / state.totalSeconds) * 10)
+        : 0;
+      blockDivs.forEach((block, i) => {
+        if (i < filledCount) {
+          block.classList.remove('empty');
+          block.style.background = color;
+        } else {
+          block.classList.add('empty');
+          block.style.background = '';
+        }
+      });
+      blocksTime.textContent = timeStr;
+      blocksTime.style.color = color;
+    }
     function startTick() {
       clearInterval(state.tickInterval);
       state.tickInterval = setInterval(() => {
