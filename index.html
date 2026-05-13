@@ -302,6 +302,8 @@
       oscillator:         null,
       audioCtx:           null,
       heartbeatCtx:       null,
+      colorBurstTicks:    0,
+      lastColor:          '',
     };
 
     // ── DOM refs ──
@@ -389,6 +391,8 @@
       state.running = true;
       state.milestoneTriggered = false;
       state.milestone15Triggered = false;
+      state.colorBurstTicks = 0;
+      state.lastColor = getColor(state.totalSeconds, state.totalSeconds);
       screenSetup.classList.add('hidden');
       screenTimer.classList.remove('hidden');
       updateTimerDisplay();
@@ -434,8 +438,14 @@
           clearInterval(state.tickInterval);
           handleTimerEnd();
         } else {
+          const newColor = getColor(state.remainingSeconds, state.totalSeconds);
+          if (newColor !== state.lastColor) {
+            state.colorBurstTicks = 3;
+            state.lastColor = newColor;
+          }
           checkMilestones();
           playHeartbeat();
+          if (state.colorBurstTicks > 0) state.colorBurstTicks--;
           updateTimerDisplay();
         }
       }, 1000);
@@ -485,6 +495,8 @@
       state.running = true;
       state.milestoneTriggered = false;
       state.milestone15Triggered = false;
+      state.colorBurstTicks = 0;
+      state.lastColor = getColor(state.totalSeconds, state.totalSeconds);
       btnPause.textContent = '⏸ Pause';
       updateTimerDisplay();
       startTick();
@@ -516,6 +528,7 @@
 
     // stubs for tasks 9 and 10
     function playHeartbeat() {
+      if (state.remainingSeconds > 60 && state.colorBurstTicks === 0) return;
       try {
         if (!state.heartbeatCtx) {
           state.heartbeatCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -528,7 +541,7 @@
         osc.type = 'sine';
         osc.frequency.value = 80;
         const now = ctx.currentTime;
-        const urgent = state.remainingSeconds <= 15;
+        const urgent = state.remainingSeconds <= 15 || state.colorBurstTicks > 0;
         const vol = urgent ? 1.0 : 0.35;
         const dur = urgent ? 0.22 : 0.12;
         gain.gain.setValueAtTime(vol, now);
