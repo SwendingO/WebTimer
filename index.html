@@ -471,8 +471,41 @@
       // Remove the class after the animation completes (7 iterations × 0.4s = 2.8s)
       setTimeout(() => document.body.classList.remove('flash-1min'), 2800);
     }
-    function playSiren()        { /* Task 10 */ }
-    function stopSiren()        { /* Task 10 */ }
+    function playSiren() {
+      stopSiren(); // clean up any previous instance
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc  = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sawtooth';
+        gain.gain.value = 0.25;
+        // Sweep between 380 Hz and 760 Hz in 1.5-second cycles
+        const now = ctx.currentTime;
+        for (let i = 0; i < 120; i++) {
+          osc.frequency.setValueAtTime(380, now + i * 1.5);
+          osc.frequency.linearRampToValueAtTime(760, now + i * 1.5 + 0.75);
+          osc.frequency.linearRampToValueAtTime(380, now + i * 1.5 + 1.5);
+        }
+        osc.start(now);
+        state.oscillator = osc;
+        state.audioCtx   = ctx;
+      } catch (e) {
+        console.warn('Web Audio not available:', e);
+      }
+    }
+
+    function stopSiren() {
+      if (state.oscillator) {
+        try { state.oscillator.stop(); } catch (_) {}
+        state.oscillator = null;
+      }
+      if (state.audioCtx) {
+        try { state.audioCtx.close(); } catch (_) {}
+        state.audioCtx = null;
+      }
+    }
 
     // ── Boot ──
     initSetup();
