@@ -44,7 +44,7 @@
       50%       { background-color: #0f0f1a; }
     }
     body.flash-1min  { animation: flash-1min  0.4s  ease-in-out 7; }
-    body.flash-15sec { animation: flash-1min  0.15s ease-in-out 10; }
+    body.flash-15sec { animation: flash-1min  0.3s  ease-in-out infinite; }
     body.flash-end   { animation: flash-end   0.8s  ease-in-out infinite; }
 
     /* ── Setup Screen ── */
@@ -462,8 +462,8 @@
 
     function handleTimerEnd() {
       state.running = false;
-      document.body.classList.remove('flash-1min');
-      void document.body.offsetWidth; // force reflow to restart animation
+      document.body.classList.remove('flash-1min', 'flash-15sec');
+      void document.body.offsetWidth;
       document.body.classList.add('flash-end');
       playSiren();          // defined in Task 10
       updateTimerDisplay();
@@ -480,7 +480,7 @@
     btnRestart.addEventListener('click', () => {
       clearInterval(state.tickInterval);
       stopSiren();
-      document.body.classList.remove('flash-1min', 'flash-end');
+      document.body.classList.remove('flash-1min', 'flash-15sec', 'flash-end');
       state.remainingSeconds = state.totalSeconds;
       state.running = true;
       state.milestoneTriggered = false;
@@ -493,7 +493,7 @@
     btnBack.addEventListener('click', () => {
       clearInterval(state.tickInterval);
       stopSiren();
-      document.body.classList.remove('flash-1min', 'flash-end');
+      document.body.classList.remove('flash-1min', 'flash-15sec', 'flash-end');
       state.running = false;
       screenTimer.classList.add('hidden');
       screenSetup.classList.remove('hidden');
@@ -536,10 +536,9 @@
     }
 
     function trigger15SecFlash() {
-      document.body.classList.remove('flash-1min', 'flash-15sec', 'flash-end');
+      document.body.classList.remove('flash-1min', 'flash-end');
       void document.body.offsetWidth;
       document.body.classList.add('flash-15sec');
-      setTimeout(() => document.body.classList.remove('flash-15sec'), 1500);
     }
 
     function trigger1MinFlash() {
