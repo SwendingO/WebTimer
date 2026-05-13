@@ -540,12 +540,13 @@
         gain.gain.value = 0.25;
         // Sweep between 380 Hz and 760 Hz in 1.5-second cycles
         const now = ctx.currentTime;
-        for (let i = 0; i < 400; i++) {
+        for (let i = 0; i < 2; i++) {
           osc.frequency.setValueAtTime(380, now + i * 1.5);
           osc.frequency.linearRampToValueAtTime(760, now + i * 1.5 + 0.75);
           osc.frequency.linearRampToValueAtTime(380, now + i * 1.5 + 1.5);
         }
         osc.start(now);
+        osc.stop(now + 3);
         state.oscillator = osc;
         state.audioCtx   = ctx;
       } catch (e) {
