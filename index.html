@@ -117,6 +117,7 @@
     /* ── Timer Screen ── */
     #screen-timer {
       gap: 0;
+      position: relative;
     }
 
     .timer-view {
@@ -189,6 +190,42 @@
       flex: 2;
       border-color: #4ade80;
       color: #4ade80;
+    }
+
+    /* ── Time Adjust Panel ── */
+    #time-adjust {
+      position: absolute;
+      right: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    #time-adjust button {
+      background: rgba(26, 26, 46, 0.85);
+      border: 2px solid #2a2a45;
+      border-radius: 10px;
+      color: #ccc;
+      font-size: 1.8rem;
+      width: 56px;
+      height: 56px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #time-adjust button:hover { border-color: #4ade80; color: #fff; }
+
+    #time-adjust .adjust-label {
+      color: #666;
+      font-family: monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
     }
   </style>
 </head>
@@ -274,6 +311,13 @@
         <div class="block"></div>
       </div>
       <div id="blocks-time">10:00</div>
+    </div>
+
+    <!-- Time adjust controls -->
+    <div id="time-adjust">
+      <button id="btn-add-time">▲</button>
+      <span class="adjust-label">±0:30</span>
+      <button id="btn-sub-time">▼</button>
     </div>
 
     <!-- Bottom bar -->
