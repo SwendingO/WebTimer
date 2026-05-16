@@ -442,6 +442,7 @@
       state.lastColor = getColor(state.totalSeconds, state.totalSeconds);
       screenSetup.classList.add('hidden');
       screenTimer.classList.remove('hidden');
+      timeAdjust.classList.remove('hidden');
       updateTimerDisplay();
       startTick();            // defined in Task 7
     });
@@ -613,7 +614,7 @@
       const newRemaining = Math.max(30, state.remainingSeconds + delta);
       const actualDelta = newRemaining - state.remainingSeconds;
       state.remainingSeconds = newRemaining;
-      state.totalSeconds = Math.max(30, state.totalSeconds + actualDelta);
+      state.totalSeconds = Math.min(10800, Math.max(30, state.totalSeconds + actualDelta));
       if (state.remainingSeconds > 60) state.milestoneTriggered = false;
       if (state.remainingSeconds > 15) state.milestone15Triggered = false;
       updateTimerDisplay();
