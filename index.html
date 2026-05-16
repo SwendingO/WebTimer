@@ -370,6 +370,9 @@
     const blocksContainer = $('blocks-container');
     const blocksTime     = $('blocks-time');
     const blockDivs      = blocksContainer.querySelectorAll('.block');
+    const btnAddTime     = $('btn-add-time');
+    const btnSubTime     = $('btn-sub-time');
+    const timeAdjust     = $('time-adjust');
 
     // ── Utilities ──
     function formatTime(seconds) {
@@ -522,6 +525,7 @@
       playSiren();          // defined in Task 10
       updateTimerDisplay();
       btnPause.textContent = '⏹ Done';
+      timeAdjust.classList.add('hidden');
     }
 
     btnPause.addEventListener('click', () => {
@@ -542,6 +546,7 @@
       state.colorBurstTicks = 0;
       state.lastColor = getColor(state.totalSeconds, state.totalSeconds);
       btnPause.textContent = '⏸ Pause';
+      timeAdjust.classList.remove('hidden');
       updateTimerDisplay();
       startTick();
     });
@@ -569,6 +574,9 @@
         btnToggleView.textContent = '⊞ Blocks';
       }
     });
+
+    btnAddTime.addEventListener('click', () => adjustTime(30));
+    btnSubTime.addEventListener('click', () => adjustTime(-30));
 
     // stubs for tasks 9 and 10
     function playHeartbeat() {
@@ -599,6 +607,17 @@
       document.body.classList.remove('flash-1min', 'flash-end');
       void document.body.offsetWidth;
       document.body.classList.add('flash-15sec');
+    }
+
+    function adjustTime(delta) {
+      const newRemaining = Math.max(30, state.remainingSeconds + delta);
+      const actualDelta = newRemaining - state.remainingSeconds;
+      state.remainingSeconds = newRemaining;
+      state.totalSeconds = Math.max(30, state.totalSeconds + actualDelta);
+      if (state.remainingSeconds > 60) state.milestoneTriggered = false;
+      if (state.remainingSeconds > 15) state.milestone15Triggered = false;
+      updateTimerDisplay();
+      checkMilestones();
     }
 
     function trigger1MinFlash() {
